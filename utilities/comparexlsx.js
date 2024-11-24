@@ -1,3 +1,5 @@
+import { error } from 'console';
+
 const Excel = require('exceljs')
 
 export const comapreExcel = async (expectedPath, actualPath, config = {}) => {
@@ -40,10 +42,12 @@ const compareSheetName = (expectedWb, actualWb) => {
 }
 
 const compareSheetData = (expectedWb, actualWb, config) => {
+    const errors = [];
 
     try {
+
         const sheetsName = getSheetName(expectedWb);
-        for (let name = 0; name <= sheetsName.length; name++) {
+        for (let name = 0; name < sheetsName.length; name++) {
 
             const rowCount = expectedWb.getWorksheet(sheetsName[name]).rowCount;
             const columnCount = expectedWb.getWorksheet(sheetsName[name]).columnCount;
@@ -56,20 +60,25 @@ const compareSheetData = (expectedWb, actualWb, config) => {
 
                     const expCellValue = expectedCell.value
                     const actCellValue = actualCell.value
-                    if (expCellValue !== actCellValue) throw Error(`in ${columnName}${row} cellValue missmatch found :expected ${expCellValue} but found ${actCellValue}`)
+
+                    if (expCellValue !== actCellValue) errors.push(`in ${sheetsName[name]} ${columnName}${row} cellValue missmatch found :expected ${expCellValue} but found ${actCellValue}`)
+
                     // if (!process.env.ignoreBgColor) {
+
                     if (!config.ignoreBgColor) {
                         const expectedCellColor = expectedCell.style.fill?.fgColor?.argb
                         const actualCellColor = actualCell.style.fill?.fgColor?.argb
-                        if (expectedCellColor !== actualCellColor) throw Error(`in ${columnName}${row} bgColor missmatch found :expected ${expectedCellColor} but found ${actualCellColor}`)
+                        if (expectedCellColor !== actualCellColor) errors.push(`in ${columnName}${row} bgColor missmatch found :expected ${expectedCellColor} but found ${actualCellColor}`)
                     }
                 }
             }
-
         }
     }
     catch (e) {
-        throw e;
+        // throw e;
+    }
+    finally {
+        if (errors.length > 0) throw error('excel mismatch found', errors);
     }
 
 }
