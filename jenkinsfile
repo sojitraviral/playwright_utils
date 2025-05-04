@@ -1,0 +1,37 @@
+pipeline {
+    agent any  // Runs on any available agent with Node.js installed
+
+    stages {
+        stage('Install Dependencies') {
+            steps {
+                // Clean and install Node.js dependencies
+                sh 'npm ci'
+                // Install Playwright browsers and dependencies
+                sh 'npx playwright install --with-deps'
+            }
+        }
+        stage('Run Playwright Tests') {
+            steps {
+                // Run Playwright tests (default: headless)
+                sh 'npx playwright test'
+            }
+        }
+        stage('Archive Playwright Report') {
+            steps {
+                // Archive the Playwright HTML report as a build artifact
+                archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+                // Optionally, publish the HTML report (requires HTML Publisher plugin)
+                // publishHTML([reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright HTML Report'])
+            }
+        }
+    }
+    post {
+        always {
+            // Optionally, add cleanup or notifications here
+            echo 'Pipeline completed.'
+        }
+        failure {
+            echo 'Playwright tests failed! Check the report for details.'
+        }
+    }
+}
