@@ -16,6 +16,12 @@ pipeline {
                 sh 'npx playwright test'
             }
         }
+         stage('Show Playwright Report') {
+            steps {
+                // Run Playwright tests (default: headless)
+                sh 'npx playwright show-report'
+            }
+        }
         stage('Archive Playwright Report') {
             steps {
                 // Archive the Playwright HTML report as a build artifact
