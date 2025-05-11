@@ -7,7 +7,7 @@ pipeline {
                 // Clean and install Node.js dependencies
                 sh 'npm ci'
                 // Install Playwright browsers and dependencies
-                // sh 'npx playwright install --with-deps'
+                sh 'npx playwright install --with-deps'
             }
         }
         stage('Run Playwright Tests') {
@@ -16,12 +16,12 @@ pipeline {
                 sh "npx playwright test"
             }
         }
-         stage('Show trace viewer Report') {
-            steps {
-                // Run Trace Viewer (default: headless)
-                sh 'test-results/**/*.zip'
-            }
-        }
+        //  stage('Show trace viewer Report') {
+        //     steps {
+        //         // Run Trace Viewer (default: headless)
+        //         sh 'test-results/**/*.zip'
+        //     }
+        // }
         stage('Archive Playwright Report') {
             steps {
                 // Archive the Playwright HTML report as a build artifact
