@@ -5,9 +5,12 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 // Clean and install Node.js dependencies
-                sh 'npm ci'
-                // Install Playwright browsers and dependencies
-                sh 'npx playwright install --with-deps'
+                script{
+                    sh"""
+                    npm ci
+                    npx playwright install chromium
+                    """
+                }
             }
         }
         stage('Run Playwright Tests') {
