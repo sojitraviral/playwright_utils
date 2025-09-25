@@ -9,7 +9,7 @@ test.beforeEach(async ({ }) => {
   selectors.setTestIdAttribute('data-testid')
 })
 
-test.only('has title', async ({ context, page }, testInfo) => {
+test('has title', async ({ context, page }, testInfo) => {
 
   // login with api -> JWT, SMSESSIONID -> store addcookies
 
