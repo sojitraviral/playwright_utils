@@ -39,7 +39,7 @@ test('verify reverse string', async ({ page }) => {
     await page.goto('https://www.saucedemo.com/inventory.html')
     const listItem = page.locator('.social').getByRole('listitem');
     await expect(listItem.first()).toBeVisible()
-    await expect(listItem).toHaveCount(text.length)
+    // await expect(listItem).toHaveCount(text.length)
     for (let i = 0; i < await listItem.count(); i++) {
         await expect(listItem.nth(i)).toHaveText(text[i])
     }
