@@ -4,7 +4,7 @@ const { DashboardPage } = require('../pageObjects');
 
 test.use({ storageState: 'pw/admin.json' })
 
-test.only('verify add to cart functionality in Home page', async ({ page }, testInfo) => {
+test('verify add to cart functionality in Home page', async ({ page }, testInfo) => {
 
     await page.goto('https://www.saucedemo.com/inventory.html')
     const dashboardPage = new DashboardPage(page)
