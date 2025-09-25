@@ -6,9 +6,14 @@ export default class DashboardPage {
         this.page = page;
     }
 
+    searchLocator() {
+        return this.page.locator("#query-builder-test")
+    }
+
     async addToCart(itemName = []) {
         for (let i = 0; i < itemName.length; i++) {
             const item = this.page.locator('.inventory_item_description').filter({ hasText: `${itemName[i]}` })
+            await expect((item.getByRole('button', { name: 'Add to cart' })).or(item.getByRole('button', { name: 'Remove' }))).toBeVisible()
             await item.getByText('Add to cart').click()
         }
     }
@@ -31,10 +36,12 @@ export default class DashboardPage {
     async checkOutInfo(firstName, lastName, postalCode) {
         await expect(this.page.locator('span:has-text("Checkout: Your Information")')).toBeVisible()
 
+        // await expect(this.page.locator('#first-name')).toBeEditable()
         await this.page.locator('#first-name').fill(firstName)
         await this.page.locator('#last-name').fill(lastName)
         await this.page.locator('#postal-code').fill(postalCode)
         await this.page.locator('#continue').click()
     }
 }
+
 

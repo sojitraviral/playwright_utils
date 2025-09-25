@@ -1,11 +1,16 @@
 // @ts-check
-const { test, expect } = require('@playwright/test');
+const { test, selectors } = require('@playwright/test');
 const Excel = require('exceljs');
 const { comapreExcel } = require('../utilities/comparexlsx');
+const { default: DashboardPage } = require('../pageObjects/dashboardPage');
 const expectedPath = 'resources/expected.xlsx';
 const actualPath = 'resources/actual.xlsx';
+test.beforeEach(async ({ }) => {
+  selectors.setTestIdAttribute('data-testid')
+})
 
-test('has title', async ({ context }, testInfo) => {
+test.only('has title', async ({ context, page }, testInfo) => {
+
   // login with api -> JWT, SMSESSIONID -> store addcookies
 
   // axios login api call
@@ -30,7 +35,8 @@ test('has title', async ({ context }, testInfo) => {
 
   // const excel = fs.realpathSync(path, { encoding: 'utf8' });
   // console.log(testInfo.titlePath[0])
-  comapreExcel(expectedPath, actualPath, { ignoreBgColor: true });
+  // console.log(process.env.ENV)
+  // comapreExcel(expectedPath, actualPath, { ignoreBgColor: true });
   // const wb = new Excel.Workbook();
   // await Promise.all([wb.xlsx.readFile(path)])
 
@@ -38,6 +44,21 @@ test('has title', async ({ context }, testInfo) => {
   //   const sheetName = item.name;
   //   console.log(sheetName)
   // });
+  const dashboardPage = new DashboardPage()
+  await page.goto('https://github.com/');
+
+  await page.getByPlaceholder("Search or jump to...").click();
+  await page.locator("#query-builder-test").fill("playwright");
+  await page.keyboard.press('Enter')
+
+  await page.getByTestId('results-list').getByRole("link", { name: "microsoft/playwright" }).first().click()
+  // await page.getByRole("link", { name: "microsoft/playwright" }).first().click()
+  await page.getByRole("button", { name: "Code" }).click()
+  await page.locator("[data-component='IconButton']").last().click()
+  const repoUrl = await page.evaluate("navigator.clipboard.readText()");
+  // const repoUrl = await page.locator("#clone-with-https").getAttribute("value")
+  console.log("url", repoUrl)
+  await page.pause()
 
 });
 

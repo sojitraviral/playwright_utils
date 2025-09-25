@@ -7,6 +7,8 @@ pipeline {
                 // Clean and install Node.js dependencies
                 script{
                     sh"""
+                    #!/bin/bash
+                    set -ex
                     npm ci
                     npx playwright install chromium
                     """

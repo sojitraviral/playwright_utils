@@ -17,9 +17,24 @@ module.exports = defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 1,
+  // retries: process.env.CI ? 2 : 1,
   /* Opt out of parallel tests on CI. */
   workers: 10,
+  timeout: 30 * 1000,
+  expect: {
+    timeout: 10 * 1000,
+  },
+  snapshotPathTemplate: './resources/screenshots/{testFilePath}/{arg}{ext}',
+  // projects: [
+  //   {
+  //     name: 'chromium',
+  //     use: {
+  //       ...devices['Galaxy S8'],
+  //       // isMobile: false
+  //     },
+  //   },
+  // ],
+
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   // reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -35,9 +50,12 @@ module.exports = defineConfig({
     trace: 'on-first-retry',
     video: 'on-first-retry',
     browserName: 'chromium',
+    // testIdAttribute: 'data-testid',
+    permissions: ['clipboard-read', 'clipboard-write']
     // permissions: ["clip-bord-copy"]
   },
   globalSetup: './global-setup'
+
   /* Run your local dev server before starting the tests */
   // webServer: {
   //   command: 'npm run start',
