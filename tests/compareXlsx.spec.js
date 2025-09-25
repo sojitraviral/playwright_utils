@@ -2,7 +2,7 @@
 const { test, selectors } = require('@playwright/test');
 const Excel = require('exceljs');
 const { comapreExcel } = require('../utilities/comparexlsx');
-const { default: DashboardPage } = require('../pageObjects/dashboardPage');
+const { DashboardPage } = require('../pageObjects');
 const expectedPath = 'resources/expected.xlsx';
 const actualPath = 'resources/actual.xlsx';
 test.beforeEach(async ({ }) => {
